@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useAuth } from "@/lib/AuthContext";
 import { BookPlus, CheckCircle2, Loader2, Sparkles, Wand2 } from "lucide-react";
-import { useStoryStore, type GeneratedStory } from "@/lib/store";
+import { useStoryStore, type Story } from "@/lib/store";
 import { motion } from "framer-motion";
 import { useCursor } from "@/lib/CursorContext";
 
@@ -16,7 +16,7 @@ export default function AuthorDashboard() {
   const [bookType, setBookType] = useState("children");
   const [selectedLang, setSelectedLang] = useState("English");
   const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedStory, setGeneratedStory] = useState<GeneratedStory | null>(null);
+  const [generatedStory, setGeneratedStory] = useState<Story | null>(null);
 
   const languages = ["English", "Spanish", "French", "Japanese", "Mandarin", "German"];
 
@@ -52,13 +52,7 @@ export default function AuthorDashboard() {
 
       const storyResult = await response.json();
       
-      const newStory: GeneratedStory = {
-        id: crypto.randomUUID(),
-        created_at: new Date().toISOString(),
-        ...storyResult
-      };
-
-      addStory(newStory);
+      const newStory = addStory(storyResult);
       setGeneratedStory(newStory);
     } catch (error) {
       console.error(error);
